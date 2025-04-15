@@ -28,3 +28,4 @@
 /Users/jhonalbert/RiderProjects/ConvertToPDF/ConvertToPDF/obj/Debug/net8.0/ConvertToPDF.pdb
 /Users/jhonalbert/RiderProjects/ConvertToPDF/ConvertToPDF/obj/Debug/net8.0/ConvertToPDF.genruntimeconfig.cache
 /Users/jhonalbert/RiderProjects/ConvertToPDF/ConvertToPDF/obj/Debug/net8.0/ref/ConvertToPDF.dll
+/Users/jhonalbert/RiderProjects/ConvertToPDF/ConvertToPDF/obj/Debug/net8.0/ConvertToPDF.sourcelink.json
