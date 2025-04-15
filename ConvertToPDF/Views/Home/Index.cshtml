@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow rounded">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Convertir archivo a PDF</h5>
+                </div>
+                <div class="card-body">
+                    <form id="pdfForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Selecciona un archivo</label>
+                            <input type="file" name="file" id="file" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Convertir a PDF</button>
+                    </form>
+
+                    <div id="downloadSection" class="mt-4 d-none text-center">
+                        <a id="downloadLink" class="btn btn-success" download>Descargar PDF</a>
+                    </div>
+
+                    <div id="errorSection" class="mt-3 text-danger d-none"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("pdfForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const fileInput = document.getElementById("file");
+        const file = fileInput.files[0];
+
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/Home/ConvertToPdf", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                document.getElementById("errorSection").innerText = "Error: " + errorText;
+                document.getElementById("errorSection").classList.remove("d-none");
+                return;
+            }
+
+            const blob = await response.blob();
+            const downloadUrl = URL.createObjectURL(blob);
+            const link = document.getElementById("downloadLink");
+            link.href = downloadUrl;
+            link.download = file.name.replace(/\.[^/.]+$/, "") + ".pdf";
+
+            document.getElementById("downloadSection").classList.remove("d-none");
+            document.getElementById("errorSection").classList.add("d-none");
+
+            // 🧼 Limpiar el input después de procesar
+            fileInput.value = "";
+
+            link.onclick = () => {
+                document.getElementById("downloadSection").classList.add("d-none");
+            };
+        } catch (error) {
+            document.getElementById("errorSection").innerText = "Error inesperado: " + error;
+            document.getElementById("errorSection").classList.remove("d-none");
+        }
+    });
+</script>
